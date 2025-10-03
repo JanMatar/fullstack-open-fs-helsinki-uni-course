@@ -82,4 +82,4 @@ sequenceDiagram
     S-->>B: 201 Created 
     deactivate S
 
-    Note over B: UI is already updated; no redirect, no page reload
+    Note over B: UI is already updated; no redirect , no page reload
