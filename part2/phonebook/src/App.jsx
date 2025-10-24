@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personServices from "./services/notes"
 
 const Person = ({person}) => {
   return(
@@ -22,13 +23,18 @@ const Persons = ({personsToShow}) => <ul>{personsToShow.map(person => <Person ke
 
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')  
-  const [filter, setFilter] = useState('')
+  const [filter, setFilter] = useState('')  
+
+useEffect(() => {
+  personServices
+    .getAll()
+    .then(initialNotes => {
+      setPersons(initialNotes)
+    })
+}, [])
 
 const addPerson = (event) => {
   event.preventDefault()
@@ -44,10 +50,13 @@ const addPerson = (event) => {
     return;
   }
 
-  setPersons(persons.concat(personObject))
-  setNewName('')
-  setNewNumber('')
-
+  personServices
+    .create(personObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
 }
 
 
