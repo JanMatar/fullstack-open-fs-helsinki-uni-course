@@ -71,6 +71,13 @@ const addPerson = (event) => {
           setErrorMessage(null)
         }, 5000)
       })
+      .catch( error => {
+         setErrorMessage(`infromation of ${personObject.name.trim()} has already been removed from the server`)
+         setTimeout(() => {
+         setErrorMessage(null)
+         } , 5000)
+        }
+      )
     return;
   }
 
@@ -95,7 +102,18 @@ const deletePerson = ({name, id}) => {
     .remove(id)
     .then(() => {
       setPersons(persons.filter(p => p.id !== id))
+      setErrorMessage(`deleted ${name.trim()}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      } , 5000)
     })
+    .catch( error => {
+        setErrorMessage(`${name.trim()} has already been removed from the server`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        } , 5000)
+      }
+    )
 }
 
 
