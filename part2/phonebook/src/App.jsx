@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import personServices from "./services/notes"
-import axios from 'axios'
+import ErrorNotification from './components/ErrorNotification'
+
 
 const Person = ({person, deletePerson}) => {
   return(
@@ -33,7 +34,9 @@ const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')  
-  const [filter, setFilter] = useState('')  
+  const [filter, setFilter] = useState('') 
+  const [errorMessage, setErrorMessage] = useState(null)
+
 
 useEffect(() => {
   personServices
@@ -55,6 +58,7 @@ const addPerson = (event) => {
   if(persons.some(person => person.name.trim() === newName.trim())){
     const confirmChange = window.confirm(`${newName.trim()} is already added to phonebook, replace the old number with a new one?`) 
     if(!confirmChange) return
+
     const personToChange = persons.find(person => person.name.trim() === newName.trim())
     personServices
       .update(personToChange.id, { ...personToChange, number: newNumber})
@@ -62,6 +66,10 @@ const addPerson = (event) => {
         setPersons(persons.map(person => person.id === personToChange.id ? returnedPerson : person))
         setNewName('')
         setNewNumber('')
+        setErrorMessage(`Changed ${returnedPerson.name.trim()}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
     return;
   }
@@ -72,6 +80,10 @@ const addPerson = (event) => {
       setPersons(persons.concat(returnedPerson))
       setNewName('')
       setNewNumber('')
+      setErrorMessage(`Added ${newName.trim()}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      } , 5000)
     })
 }
 
@@ -107,6 +119,7 @@ const personsToShow =  (filter === '') ? persons : (persons.filter(person => per
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorNotification message={errorMessage} />
       <Filter filter={filter} handleNewFilter={handleNewFilter} />
       <h3>add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} handleNewName={handleNewName} newNumber={newNumber} handleNewNumber={handleNewNumber} />
