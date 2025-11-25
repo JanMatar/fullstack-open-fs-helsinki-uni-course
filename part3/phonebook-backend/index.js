@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
+
+morgan.token('body', (req, res) => {return JSON.stringify(req.body)})
+const customLogFormat = ':method :url :status :res[content-length] - :response-time ms :body'
 
 app.use(express.json());
+app.use(morgan(customLogFormat));
 
 let persons = [
     { id: 1, name: "Arto Hellas", number: "040-123456" },
