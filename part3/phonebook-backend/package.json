@@ -6,14 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "build:ui": "shx rm -rf dist && cd  C:/Users/Jan/Desktop/fullstack-open-fs-helsinki-uni-course/part2/phonebook && npm run build && shx cp -r dist  C:/Users/Jan/Desktop/fullstack-open-fs-helsinki-uni-course/part3/phonebook-backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
+    "cor": "^0.0.0",
     "express": "^5.1.0",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "shx": "^0.4.0"
   }
 }
