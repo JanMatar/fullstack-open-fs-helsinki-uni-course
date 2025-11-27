@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
+
+app.use(cors());
 morgan.token('body', (req, res) => {return JSON.stringify(req.body)})
 const customLogFormat = ':method :url :status :res[content-length] - :response-time ms :body'
 
@@ -65,7 +68,7 @@ app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${persons.length} people<br>${Date()}`);
 })
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on PORT ${PORT}`)
 })
